@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Thrive Ajo — Mobile Dashboard</title>
+<style>
+:root{--bg:#171717;--panel:#292929;--green:#20d2a5;--text:#f4f4f4}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#0d0d0d}
+body{color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+button{font:inherit;border:0;cursor:pointer}
+.app{width:100%;max-width:430px;min-height:100vh;min-height:100dvh;margin:auto;background:var(--bg);overflow:hidden;position:relative;padding-bottom:88px}
+.top{min-height:96px;padding:20px 22px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top-left{min-width:0;display:flex;align-items:center;gap:9px}
+.avatar{flex:0 0 48px;width:48px;height:48px;border-radius:50%;background:#eee;color:#222;display:grid;place-items:center;font-size:23px}
+.upgrade{min-width:0;background:#e6fff8;color:#18a986;border-radius:22px;padding:9px 12px;font-weight:700;font-size:13px;line-height:1.2;text-align:center;white-space:nowrap}
+.icons{flex:0 0 auto;display:flex;align-items:center;gap:15px;font-size:23px;color:#eee}
+.icon{position:relative}.badge{position:absolute;right:-8px;top:-8px;background:#ef4444;color:#fff;font-size:10px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center}
+.account{margin:0 18px;background:var(--panel);border-radius:20px;overflow:hidden}
+.balance{background:var(--green);color:#101616;padding:17px}
+.account-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px}
+.account-name{min-width:0;display:flex;align-items:center;gap:7px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-no{flex:0 0 auto;font-weight:700;white-space:nowrap}
+.balance-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:16px}
+.label{color:#158d73;font-size:13px;margin-bottom:8px}.amount{font-size:clamp(20px,6.8vw,29px);font-weight:800;white-space:nowrap}.arrow{font-size:27px;font-weight:400;margin-left:2px}
+.collection{min-height:62px;padding:16px 17px;display:flex;justify-content:space-between;align-items:center;gap:12px;color:#eee;font-size:14px;font-weight:600}
+.collection span{color:#aaa;font-weight:400}
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:24px 18px 20px}
+.quick-item{min-width:0;text-align:center;color:#ddd;font-size:13px}
+.circle{width:clamp(58px,17vw,72px);height:clamp(58px,17vw,72px);background:var(--green);color:#10211e;border-radius:50%;display:grid;place-items:center;margin:0 auto 9px;font-size:28px;font-weight:700}
+.banner{margin:0 18px 20px;background:#fafafa;color:#202020;border-radius:14px;padding:11px 12px;display:flex;align-items:center;gap:9px;font-weight:700;font-size:12px}
+.banner-icon{flex:0 0 38px;width:38px;height:38px;background:var(--green);border-radius:50%;display:grid;place-items:center;font-size:19px}
+.banner>span{min-width:0;line-height:1.25}.banner .go{flex:0 0 auto;margin-left:auto;background:var(--green);padding:8px 13px;border-radius:20px;color:#06251e;font-weight:800;font-size:12px}
+.services{margin:0 18px;background:var(--panel);border-radius:19px;padding:19px 9px 18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:19px 4px}
+.service{min-width:0;text-align:center;color:#ddd;font-size:12px;line-height:1.2}
+.service-icon{width:58px;height:58px;background:#191919;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;color:var(--green);font-size:22px;border:1px solid #202020}
+.new{position:absolute;background:#ff6680;color:#fff;font-size:9px;padding:3px 6px;border-radius:6px;margin:-6px 0 0 27px;font-weight:800}
+.promo{margin:20px 18px 0;border-radius:20px;padding:21px 18px;background:linear-gradient(115deg,#163b35,#19322b);min-height:188px}
+.promo h2{margin:0;font-size:20px;line-height:1.2}.dash{border-top:2px dashed #42635b;margin:20px 0 16px}
+.promo-row{display:flex;align-items:center;gap:11px}.money{flex:0 0 auto;font-size:38px}.promo-text{min-width:0;flex:1}
+.promo-title{font-size:17px;font-weight:800;margin-bottom:5px}.promo-sub{font-size:12px;color:#9da9a5;line-height:1.3}
+.promo button{flex:0 0 auto;background:var(--green);border-radius:25px;padding:11px 17px;font-weight:800;color:#083329}
+.nav{position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:78px;background:#292929;border-top:1px solid #353535;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 0 max(8px,env(safe-area-inset-bottom))}
+.nav-item{text-align:center;color:#bbb;font-size:12px;line-height:1}.nav-icon{font-size:25px;height:34px;display:grid;place-items:center}.nav-item.active{color:var(--green);font-weight:700}
+@media(max-width:360px){.top{padding-left:15px;padding-right:15px}.account,.banner,.services,.promo{margin-left:14px;margin-right:14px}.quick{padding-left:14px;padding-right:14px}.upgrade{font-size:11px;padding:8px 9px}.icons{gap:10px;font-size:20px}.account-row{font-size:13px}.label{font-size:11px}.amount{font-size:18px}.service-icon{width:52px;height:52px}}
+@media(min-width:700px){body{background:#e8e8e8;padding:25px 0}.app{min-height:900px;border-radius:28px;box-shadow:0 15px 60px #0003}.nav{position:absolute;left:0;transform:none;width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="top-left">
+      <div class="avatar">👤</div>
+      <div class="upgrade">Upgrade to Merchant ›</div>
+    </div>
+    <div class="icons"><span>♧</span><span>⌗</span><span class="icon">♧<i class="badge">4</i></span></div>
+  </div>
+
+  <section class="account">
+    <div class="balance">
+      <div class="account-row">
+        <div class="account-name">◉ &nbsp; XXXXXXX</div>
+        <div class="account-no">XXXXXXX　⌄</div>
+      </div>
+      <div class="balance-grid">
+        <div><div class="label">Available Balance　◉</div><div class="amount">₦XXXXXXX <span class="arrow">›</span></div></div>
+        <div><div class="label">Commission</div><div class="amount">₦XXXXXXX <span class="arrow">›</span></div></div>
+      </div>
+    </div>
+    <div class="collection"><span>Today's Collection　<b style="color:#ddd">₦XXXXXXX</b></span><span>4 Txns　›</span></div>
+  </section>
+
+  <div class="quick">
+    <div class="quick-item"><div class="circle">↪</div>Transfer</div>
+    <div class="quick-item"><div class="circle">▣</div>Pay Me</div>
+    <div class="quick-item"><div class="circle">▤</div>Transaction</div>
+    <div class="quick-item"><div class="circle">⌁</div>Reports</div>
+  </div>
+
+  <div class="banner"><div class="banner-icon">⬆</div><span>Upgrade to increase transaction limits</span><button class="go">GO</button></div>
+
+  <section class="services">
+    <div class="service"><div class="service-icon">▥</div>Airtime</div>
+    <div class="service"><div class="service-icon">⇅</div>Data</div>
+    <div class="service"><div class="service-icon">◉</div>Betting</div>
+    <div class="service"><div class="service-icon">▣</div>SafeBox</div>
+    <div class="service"><div class="service-icon">▱</div><span class="new">New</span>Loan</div>
+    <div class="service"><div class="service-icon">▦</div>POS</div>
+    <div class="service"><div class="service-icon">♧</div>Payment Alerts</div>
+    <div class="service"><div class="service-icon">•••</div>More</div>
+  </section>
+
+  <section class="promo">
+    <h2>Save Daily, Achieve Your Goals</h2>
+    <div class="dash"></div>
+    <div class="promo-row">
+      <div class="money">💰</div>
+      <div class="promo-text"><div class="promo-title">Target Savings</div><div class="promo-sub">Save with Thrive Ajo and fulfil your dreams with ease.</div></div>
+      <button>Go</button>
+    </div>
+  </section>
+
+  <nav class="nav">
+    <div class="nav-item active"><div class="nav-icon">⌂</div>Home</div>
+    <div class="nav-item"><div class="nav-icon">⌁</div>Savings</div>
+    <div class="nav-item"><div class="nav-icon">♧</div>Support</div>
+    <div class="nav-item"><div class="nav-icon">▦</div>Me</div>
+  </nav>
+</div>
+<script>
+document.querySelectorAll('button,.quick-item,.service,.nav-item').forEach(el=>{
+  el.addEventListener('click',()=>{
+    if(el.classList.contains('nav-item')){
+      document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+      el.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
